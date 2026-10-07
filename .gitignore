@@ -42,3 +42,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local AI working context, not meant for the public repo
+CLAUDE.md
