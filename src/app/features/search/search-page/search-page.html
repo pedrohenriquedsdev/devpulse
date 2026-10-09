@@ -1,4 +1,8 @@
 <section class="hero">
   <h1>DevPulse</h1>
   <p class="tagline">Explore o perfil de qualquer desenvolvedor no GitHub.</p>
+
+  <!-- [(ngModel)]: "banana in a box". [] manda o valor de "username" pro input,
+       () manda o que for digitado de volta pro componente. Via dupla. -->
+  <input type="text" [(ngModel)]="username" placeholder="Digite um usuário do GitHub" />
 </section>
