@@ -1,4 +1,13 @@
 <section class="hero">
   <h1>DevPulse</h1>
   <p class="tagline">Explore o perfil de qualquer desenvolvedor no GitHub.</p>
+
+  <!-- [(ngModel)]: "banana in a box". [] manda o valor de "username" pro input,
+       () manda o que for digitado de volta pro componente. Via dupla. -->
+  <!-- (ngSubmit): dispara no Enter ou no clique do botão type="submit",
+       e o Angular já chama preventDefault() por você. -->
+  <form (ngSubmit)="onSearch()">
+    <input type="text" [(ngModel)]="username" name="username" placeholder="Digite um usuário do GitHub" />
+    <button type="submit">Buscar</button>
+  </form>
 </section>
