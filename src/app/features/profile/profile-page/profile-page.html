@@ -1,30 +1,40 @@
-@if (user(); as u) {
-  <article class="profile-card">
-    <!-- Colchetes = property binding: o valor não é texto fixo, é uma
-         expressão avaliada no componente. Se "u" mudar, o atributo muda sozinho. -->
-    <img class="avatar" [src]="u.avatar_url" [alt]="u.login" />
+@let state = user();
 
-    <div class="identity">
-      <h1 class="display-name">{{ u.name ?? u.login }}</h1>
-      <p class="login">&#64;{{ u.login }}</p>
-      <p class="bio">{{ u.bio ?? 'Sem biografia.' }}</p>
-    </div>
+@switch (state.status) {
+  @case ('loading') {
+    <p class="loading">Carregando perfil...</p>
+  }
+  @case ('error') {
+    <!-- Dentro deste @case, o TS já sabe que "state" é { status: 'error'; error: string }. -->
+    <p class="error">{{ state.error }}</p>
+  }
+  @case ('success') {
+    <!-- E aqui, que "state" é { status: 'success'; data: GithubUser }. -->
+    <article class="profile-card">
+      <!-- Colchetes = property binding: o valor não é texto fixo, é uma
+           expressão avaliada no componente. Se "state" mudar, o atributo muda sozinho. -->
+      <img class="avatar" [src]="state.data.avatar_url" [alt]="state.data.login" />
 
-    <dl class="stats">
-      <div class="stat">
-        <dt><i class="bi bi-book"></i> Repositórios</dt>
-        <dd>{{ u.public_repos }}</dd>
+      <div class="identity">
+        <h1 class="display-name">{{ state.data.name ?? state.data.login }}</h1>
+        <p class="login">&#64;{{ state.data.login }}</p>
+        <p class="bio">{{ state.data.bio ?? 'Sem biografia.' }}</p>
       </div>
-      <div class="stat">
-        <dt><i class="bi bi-people"></i> Seguidores</dt>
-        <dd>{{ u.followers }}</dd>
-      </div>
-      <div class="stat">
-        <dt><i class="bi bi-person-plus"></i> Seguindo</dt>
-        <dd>{{ u.following }}</dd>
-      </div>
-    </dl>
-  </article>
-} @else {
-  <p class="loading">Carregando perfil...</p>
+
+      <dl class="stats">
+        <div class="stat">
+          <dt><i class="bi bi-book"></i> Repositórios</dt>
+          <dd>{{ state.data.public_repos }}</dd>
+        </div>
+        <div class="stat">
+          <dt><i class="bi bi-people"></i> Seguidores</dt>
+          <dd>{{ state.data.followers }}</dd>
+        </div>
+        <div class="stat">
+          <dt><i class="bi bi-person-plus"></i> Seguindo</dt>
+          <dd>{{ state.data.following }}</dd>
+        </div>
+      </dl>
+    </article>
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, input, inject, OnInit, signal } from '@angular/core';
 import { Github } from '../../../core/github';
 import { GithubUser } from '../../../models/github-user';
+import { RequestState } from '../../../models/request-state';
 @Component({
   imports: [],
   selector: 'app-profile-page',
@@ -16,15 +17,16 @@ export class ProfilePage implements OnInit {
   // atribui esse valor na mão.
   username = input.required<string>();
 
-  // Estado reativo: a HTML "observa" este signal e se re-renderiza
-  // sozinha sempre que o valor dele muda (de null para o usuário real).
-  user = signal<GithubUser | null>(null);
+  // Três estados possíveis, nunca misturados: carregando, sucesso (com dado),
+  // ou erro (com mensagem). O campo "status" é o que diferencia qual é qual.
+  user = signal<RequestState<GithubUser>>({ status: 'loading' });
 
   ngOnInit(): void {
-    // .subscribe() é o "play": só agora a requisição HTTP é de fato disparada.
-    // O callback roda quando a resposta chega, com o dado já tipado como GithubUser.
-    this.service.getUser(this.username()).subscribe((user) => {
-      this.user.set(user);
+    // subscribe({ next, error }): "next" roda em caso de sucesso, "error" roda
+    // quando o Observable emite uma falha (ex: 404 da API do GitHub).
+    this.service.getUser(this.username()).subscribe({
+      next: (user) => this.user.set({ status: 'success', data: user }),
+      error: () => this.user.set({ status: 'error', error: 'Usuário não encontrado.' }),
     });
   }
 }
