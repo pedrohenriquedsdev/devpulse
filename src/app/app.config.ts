@@ -5,5 +5,11 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 
 // Arquivo responsável pela DI
 export const appConfig: ApplicationConfig = {
-  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes, withComponentInputBinding()), provideHttpClient(withFetch())],
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    // withComponentInputBinding() é o que liga parâmetros de rota (:username)
+    // direto a inputs de mesmo nome no componente, sem código manual.
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withFetch()),
+  ],
 };

@@ -1,5 +1,7 @@
 @if (user(); as u) {
   <article class="profile-card">
+    <!-- Colchetes = property binding: o valor não é texto fixo, é uma
+         expressão avaliada no componente. Se "u" mudar, o atributo muda sozinho. -->
     <img class="avatar" [src]="u.avatar_url" [alt]="u.login" />
 
     <div class="identity">

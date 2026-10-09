@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 export class Github {
   private readonly http = inject(HttpClient);
 
+  // Retorna um Observable "frio": nenhuma requisição HTTP acontece aqui.
+  // Ele só é disparado quando alguém chama .subscribe() (feito no ProfilePage).
   getUser(username: string): Observable<GithubUser> {
     return this.http.get<GithubUser>(`https://api.github.com/users/${username}`);
   }
